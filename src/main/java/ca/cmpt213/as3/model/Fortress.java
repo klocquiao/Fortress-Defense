@@ -1,5 +1,6 @@
 package ca.cmpt213.as3.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class Fortress {
     public Fortress() {
         this.fortressHealth = STARTING_HEALTH;
     }
+    private List<Observer> observers = new ArrayList<Observer>();
 
     public int getFortressHealth() {
         if (fortressHealth > 0) {
@@ -25,9 +27,19 @@ public class Fortress {
         for (Tank tank: tanks) {
             fortressHealth -= tank.getDamage();
         }
+
+        if (fortressHealth <= 0) {
+            notifyAllObservers();
+        }
     }
 
-    public boolean isDestroyed() {
-        return fortressHealth <= 0;
+    public void addObserver(Observer observer){
+        observers.add(observer);
+    }
+
+    public void notifyAllObservers(){
+        for (Observer observer : observers) {
+            observer.getResults();
+        }
     }
 }

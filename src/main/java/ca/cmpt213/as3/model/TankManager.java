@@ -5,6 +5,7 @@ import java.util.List;
 
 public class TankManager {
     private List<Tank> tanks = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<Observer>();
 
     public List<Tank> getTanks() {
         return tanks;
@@ -24,9 +25,19 @@ public class TankManager {
 
     public void removeTank(Tank tank) {
         tanks.remove(tank);
+
+        if (tanks.size() == 0) {
+            notifyAllObservers();
+        }
     }
 
-    public boolean isTanksDestroyed() {
-        return tanks.size() == 0;
+    public void addObserver(Observer observer){
+        observers.add(observer);
+    }
+
+    public void notifyAllObservers(){
+        for (Observer observer : observers) {
+            observer.getResults();
+        }
     }
 }

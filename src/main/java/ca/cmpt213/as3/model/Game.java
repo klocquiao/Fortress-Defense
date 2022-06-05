@@ -8,6 +8,24 @@ public class Game {
     private boolean isGameLost = false;
     private boolean isCheat = false;
 
+    public Game() {
+        fortress.addObserver(new Observer() {
+            @Override
+            public void getResults() {
+                isGameLost = true;
+                isCheat = true;
+            }
+        });
+
+        field.getTanksOnField().addObserver(new Observer() {
+            @Override
+            public void getResults() {
+                isGameWon = true;
+                isCheat = true;
+            }
+        });
+    }
+
     public void userAttackAtCoordinate(Coordinate coordinate) {
         Cell target = field.getCell(coordinate);
         target.takeFireFromPlayer();
@@ -17,16 +35,6 @@ public class Game {
         }
 
         fortress.takeDamageFromTanks(field.getTanksOnField().getTanks());
-
-        if (fortress.isDestroyed()) {
-            isGameLost = true;
-            isCheat = true;
-        }
-
-        if (field.getTanksOnField().isTanksDestroyed()) {
-            isGameWon = true;
-            isCheat = true;
-        }
     }
 
     public Fortress getFortress() {
